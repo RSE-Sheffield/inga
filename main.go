@@ -1,5 +1,8 @@
 package main
 
+// run and visit
+// http://localhost:8800/api/v201910/?api=APIKEY&product=PRODUCT&uuid=UUID
+
 import (
 	"fmt"
 	"log"
@@ -7,8 +10,12 @@ import (
 )
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
-	title := r.URL.Path
-	fmt.Printf("%s\n", title)
+	path := r.URL.Path
+	apikey := r.FormValue("apikey")
+	product := r.FormValue("product")
+	uuid := r.FormValue("uuid")
+	fmt.Printf("apikey %s, product %s, uuid %s, path %s\n",
+		apikey, product, uuid, path)
 }
 
 func main() {
