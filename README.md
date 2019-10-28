@@ -2,13 +2,12 @@
 inga's Not Google Analytics
 
 # Client Developers
-For now, either:
-* make an HTTP GET request to: `https://inga.shef.ac.uk/api/v201910/?apikey=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>`.
-* or, make a POST request, e.g.
+For now:
+make a POST request, e.g.
 ```
 curl -v --data 'apikey=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>' http://inga.shef.ac.uk/api/v201910/
 ```
-These will return a 200 response.
+This will return a 200 response.
 
 The following key=value pairs are passed to inga.
 * `APIkey` - will be granted on request.
