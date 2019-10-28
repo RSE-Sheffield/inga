@@ -14,8 +14,9 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	apikey := r.FormValue("apikey")
 	product := r.FormValue("product")
 	uuid := r.FormValue("uuid")
-	fmt.Printf("apikey %s, product %s, uuid %s, path %s\n",
-		apikey, product, uuid, path)
+	version := r.FormValue("version")
+	fmt.Printf("apikey %s, product %s, version %s, uuid %s, path %s\n",
+		apikey, product, version, uuid, path)
 }
 
 func main() {
