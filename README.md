@@ -2,7 +2,7 @@
 inga's Not Google Analytics
 
 # Client Developers
-For now: make an HTTP GET request to: `https://inga.shef.ac.uk/api/v201910/?api=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>`
+For now: make an HTTP GET request to: `https://inga.shef.ac.uk/api/v201910/?apikey=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>`
 This will return a 200 response.
 
 * `APIkey` - will be granted on request.
