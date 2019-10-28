@@ -2,9 +2,15 @@
 inga's Not Google Analytics
 
 # Client Developers
-For now: make an HTTP GET request to: `https://inga.shef.ac.uk/api/v201910/?apikey=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>`
-This will return a 200 response.
+For now, either:
+* make an HTTP GET request to: `https://inga.shef.ac.uk/api/v201910/?apikey=<APIKEY>&product=<PRODUCT>&version=<VERSION>&uuid=<UUID>`.
+* or, make a POST request, e.g.
+```
+curl -v --data apikey=<APIKEY> --data product=<PRODUCT> --data version=<VERSION> --data uuid=<UUID> http://inga.shef.ac.uk/api/v201910/
+```
+These will return a 200 response.
 
+The following data variables are passed to inga.
 * `APIkey` - will be granted on request.
 * `PRODUCT` - is up to the vendor, i.e. the name of your software package.
 * `VERSION` - your application's version.
