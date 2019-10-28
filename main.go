@@ -1,7 +1,7 @@
 package main
 
 // run and visit
-// http://localhost:8800/api/v201910/?api=APIKEY&product=PRODUCT&uuid=UUID
+// http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID
 
 import (
 	"fmt"
