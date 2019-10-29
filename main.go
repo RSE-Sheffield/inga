@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,5 +22,12 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/api/v201910/", apiHandler)
-	log.Fatal(http.ListenAndServe(":8800", nil))
+
+	port := os.Getenv("INGA_PORT")
+	if port == "" {
+		port = "8800"
+	}
+	port = ":" + port
+	fmt.Fprintln(os.Stderr, "Listening on", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
