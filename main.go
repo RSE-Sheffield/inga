@@ -5,7 +5,7 @@ package main
 // or specify a different port (the default is 8800 for development)
 // INGA_PORT=8080 ./inga
 // and visit
-// http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID
+// http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID&eventID=EVENTID&dateTime=DATETIME
 
 import (
 	"fmt"
@@ -20,8 +20,10 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	product := r.FormValue("product")
 	uuid := r.FormValue("uuid")
 	version := r.FormValue("version")
-	fmt.Printf("apikey %s, product %s, version %s, uuid %s, path %s\n",
-		apikey, product, version, uuid, path)
+	eventID := r.FormValue("eventID")
+	dateTime := r.FormValue("dateTime")
+	fmt.Printf("apikey %s, product %s, version %s, uuid %s, eventID %s, dateTime %s, path %s\n",
+		apikey, product, version, uuid, eventID, dateTime, path)
 }
 
 func main() {
