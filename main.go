@@ -1,12 +1,17 @@
 package main
 
-// run and visit
+// run with
+// ./inga
+// or specify a different port (the default is 8800 for development)
+// INGA_PORT=8080 ./inga
+// and visit
 // http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID
 
 import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,5 +26,12 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/api/v201910/", apiHandler)
-	log.Fatal(http.ListenAndServe(":8800", nil))
+
+	port := os.Getenv("INGA_PORT")
+	if port == "" {
+		port = "8800"
+	}
+	port = ":" + port
+	fmt.Fprintln(os.Stderr, "Listening on", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
