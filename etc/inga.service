@@ -1,5 +1,6 @@
 [Unit]
 Description=inga
+Requires=inga.socket
 After=network.target
 
 [Service]
@@ -8,6 +9,7 @@ Group=inga
 ExecStart=/srv/inga/inga
 Restart=always
 RestartSec=1
+NonBlocking=true
 
 [Install]
 WantedBy=multi-user.target

@@ -10,8 +10,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
@@ -29,11 +31,25 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/api/v201910/", apiHandler)
 
-	port := os.Getenv("INGA_PORT")
-	if port == "" {
-		port = "8800"
+	// Detect systemd.
+	// https://www.darkcoding.net/software/systemd-socket-activation-in-go/
+	if os.Getenv("LISTEN_PID") == strconv.Itoa(os.Getpid()) {
+		// systemd
+		fd := os.NewFile(3, "from systemd")
+		l, err := net.FileListener(fd)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Fprintln(os.Stderr, "Listening via systemd")
+		http.Serve(l, nil)
+	} else {
+		// not systemd (manual)
+		port := os.Getenv("INGA_PORT")
+		if port == "" {
+			port = "8800"
+		}
+		port = ":" + port
+		fmt.Fprintln(os.Stderr, "Listening on", port)
+		log.Fatal(http.ListenAndServe(port, nil))
 	}
-	port = ":" + port
-	fmt.Fprintln(os.Stderr, "Listening on", port)
-	log.Fatal(http.ListenAndServe(port, nil))
 }
