@@ -1,6 +1,10 @@
 package main
 
-// run and visit
+// run with
+// ./inga
+// or specify a different port (the default is 8800 for development)
+// INGA_PORT=8080 ./inga
+// and visit
 // http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID
 
 import (
