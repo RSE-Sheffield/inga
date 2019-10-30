@@ -8,7 +8,6 @@ package main
 // http://localhost:8800/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID&eventID=EVENTID&dateTime=DATETIME
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"log"
@@ -40,8 +39,7 @@ func main() {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	buf := bufio.NewWriter(f)
-	b = buf
+	b = io.Writer(f)
 
 	http.HandleFunc("/api/v201910/", apiHandler)
 
@@ -53,5 +51,4 @@ func main() {
 	fmt.Fprintln(os.Stderr, "Listening on", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 
-	buf.Flush()
 }
