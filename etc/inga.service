@@ -1,0 +1,25 @@
+# Example systemd unit file
+# Run inga as a systemd unit
+# Both an example, and the file we use to provide inga.shef.ac.uk
+
+[Unit]
+Description=inga
+After=network.target
+
+# Assumes various things are already setup:
+# user and group called inga
+# directories /srv/inga/inga for the binary; and,
+# /mnt/data/inga for the log output
+# Assumes binary has been blessed by setcap to bind to priviliged port.
+
+[Service]
+User=inga
+Group=inga
+Environment=INGA_PORT=80
+ExecStart=/srv/inga/inga
+Restart=always
+RestartSec=1
+WorkingDirectory=/mnt/data/inga
+
+[Install]
+WantedBy=multi-user.target
