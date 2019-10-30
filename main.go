@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var b io.Writer
+var log io.Writer
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
@@ -26,20 +26,20 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("version")
 	eventID := r.FormValue("eventID")
 	dateTime := r.FormValue("dateTime")
-	fmt.Fprintf(b, "apikey %s, product %s, version %s, uuid %s, eventID %s, dateTime %s, path %s\n",
+	fmt.Fprintf(log, "apikey %s, product %s, version %s, uuid %s, eventID %s, dateTime %s, path %s\n",
 		apikey, product, version, uuid, eventID, dateTime, path)
 }
 
 func main() {
 	// creates a new log file with a timestamped name
 	t := time.Now()
-	fname := "ingalog_" + t.Format("20060102150405") + ".log"
+	fname := "inga_" + t.Format("20060102150405") + ".log"
 	f, err := os.OpenFile(fname, os.O_CREATE|os.O_WRONLY, 0444)
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
-	b = io.Writer(f)
+	log = io.Writer(f)
 
 	http.HandleFunc("/api/v201910/", apiHandler)
 
