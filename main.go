@@ -9,10 +9,14 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
+
+var log io.Writer
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
@@ -22,11 +26,21 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 	version := r.FormValue("version")
 	eventID := r.FormValue("eventID")
 	dateTime := r.FormValue("dateTime")
-	fmt.Printf("apikey %s, product %s, version %s, uuid %s, eventID %s, dateTime %s, path %s\n",
+	fmt.Fprintf(log, "apikey %s, product %s, version %s, uuid %s, eventID %s, dateTime %s, path %s\n",
 		apikey, product, version, uuid, eventID, dateTime, path)
 }
 
 func main() {
+	// creates a new log file with a timestamped name
+	t := time.Now()
+	fname := "inga_" + t.Format("20060102150405") + ".log"
+	f, err := os.OpenFile(fname, os.O_CREATE|os.O_WRONLY, 0444)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	log = io.Writer(f)
+
 	http.HandleFunc("/api/v201910/", apiHandler)
 
 	port := os.Getenv("INGA_PORT")
@@ -36,4 +50,5 @@ func main() {
 	port = ":" + port
 	fmt.Fprintln(os.Stderr, "Listening on", port)
 	log.Fatal(http.ListenAndServe(port, nil))
+
 }
