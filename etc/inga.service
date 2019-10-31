@@ -17,6 +17,7 @@ User=inga
 Group=inga
 Environment=INGA_PORT=80
 ExecStart=/srv/inga/inga
+LimitNOFILE=8800
 Restart=always
 RestartSec=1
 WorkingDirectory=/mnt/data/inga
