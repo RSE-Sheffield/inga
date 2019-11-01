@@ -16,6 +16,8 @@ import (
 	"time"
 )
 
+var DefaultPort string = "8800"
+
 var logFile io.Writer
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
@@ -45,7 +47,7 @@ func main() {
 
 	port := os.Getenv("INGA_PORT")
 	if port == "" {
-		port = "8800"
+		port = DefaultPort
 	}
 	port = ":" + port
 	fmt.Fprintln(os.Stderr, "Listening on", port)
