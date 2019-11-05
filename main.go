@@ -74,5 +74,5 @@ func main() {
 	port = ":" + port
 	fmt.Fprintln(os.Stderr, "Listening on", port)
 	go pinga()
-	log.Fatal(http.ListenAndServe(port, nil))
+	log.Fatal(http.ListenAndServeTLS(port, "inga.crt", "inga.key", nil))
 }
