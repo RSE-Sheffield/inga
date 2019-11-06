@@ -47,7 +47,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 func pinga() {
 	// pings the inga server when this instance of inga is started
-	target := "http://inga.shef.ac.uk:80/api/v201910/"
+	target := "https://inga.shef.ac.uk/api/v201910/"
 	fmt.Fprintf(os.Stderr, "Pinging inga @ %s ...\n", target)
 
 	form := url.Values{}
