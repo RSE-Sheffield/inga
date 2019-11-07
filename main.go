@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -22,15 +23,30 @@ var DefaultPort string = "8800"
 var logFile io.Writer
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Path
-	apikey := r.FormValue("apikey")
-	product := r.FormValue("product")
-	uuid := r.FormValue("uuid")
-	version := r.FormValue("version")
-	eventID := r.FormValue("eventid")
-	dateTime := r.FormValue("datetime")
-	fmt.Fprintf(logFile, "%s, %s, %s, %s, %s, %s, %s\n",
-		apikey, product, version, uuid, eventID, dateTime, path)
+	fields := []string{
+		r.FormValue("apikey"),
+		r.FormValue("product"),
+		r.FormValue("uuid"),
+		r.FormValue("version"),
+		r.FormValue("eventid"),
+		r.FormValue("datetime"),
+	}
+	var args []interface{}
+	for i := range fields {
+		args = append(args, strings.Map(remove_bad, fields[i]))
+	}
+	fmt.Fprintf(logFile, "%s,%s,%s,%s,%s,%s\n", args...)
+}
+
+func remove_bad(r rune) rune {
+	// Remove runes from user input that are considered "bad".
+	// All control characters,
+	// and the CSV metacharacters «"» and «,».
+	switch {
+	case r < ' ', r == '"', r == ',':
+		return -1
+	}
+	return r
 }
 
 func pinga() {
@@ -63,7 +79,7 @@ func main() {
 	}
 	defer f.Close()
 	logFile = io.Writer(f)
-	fmt.Fprintf(logFile, "apikey, product, version, uuid, eventid, datetime, path\n") //print csv header
+	fmt.Fprintf(logFile, "apikey,product,version,uuid,eventid,datetime\n") //print csv header
 
 	http.HandleFunc("/api/v201910/", apiHandler)
 
