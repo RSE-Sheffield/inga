@@ -1,13 +1,22 @@
 package main
 
-// run with
-// ./inga
-// or specify a different port (the default is 8800 for development)
-// INGA_PORT=8080 ./inga
-// and visit
-// http://inga.shef.ac.uk/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID&eventID=EVENTID&dateTime=DATETIME
+// Running inga
+//
+// Run on default port (high-numbered, for development):
+//   ./inga
+// Run with an alternative port:
+//   INGA_PORT=8080 ./inga
+// Run with TLS:
+//   INGA_PORT=443 ./inga -cert fullchain.pem -key privkey.pem
+//
+// The inga API
+//
+// visit
+// https://inga.shef.ac.uk/api/v201910/?apikey=APIKEY&product=PRODUCT&uuid=UUID&eventID=EVENTID&dateTime=DATETIME
+// You will have to change the protocol, domain, and port as appropriate.
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -20,6 +29,9 @@ import (
 var DefaultPort string = "8800"
 
 var logFile io.Writer
+
+var certp = flag.String("cert", "", "name of certificate file")
+var keyp = flag.String("key", "", "name of (secret) key file")
 
 func apiHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
@@ -35,7 +47,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 
 func pinga() {
 	// pings the inga server when this instance of inga is started
-	target := "http://inga.shef.ac.uk:80/api/v201910/"
+	target := "https://inga.shef.ac.uk/api/v201910/"
 	fmt.Fprintf(os.Stderr, "Pinging inga @ %s ...\n", target)
 
 	form := url.Values{}
@@ -54,6 +66,8 @@ func pinga() {
 }
 
 func main() {
+	flag.Parse()
+
 	// creates a new log file with a timestamped name
 	t := time.Now()
 	fname := "inga_" + t.Format("20060102150405") + ".log"
@@ -74,5 +88,10 @@ func main() {
 	port = ":" + port
 	fmt.Fprintln(os.Stderr, "Listening on", port)
 	go pinga()
-	log.Fatal(http.ListenAndServe(port, nil))
+
+	if *certp != "" && *keyp != "" {
+		log.Fatal(http.ListenAndServeTLS(port, *certp, *keyp, nil))
+	} else {
+		log.Fatal(http.ListenAndServe(port, nil))
+	}
 }
