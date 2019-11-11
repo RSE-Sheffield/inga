@@ -74,10 +74,12 @@ func pinga() {
 	form.Add("eventid", "inga")
 	t := time.Now()
 	form.Add("datetime", t.Format("20060102150405"))
+
 	resp, err := http.PostForm(target, form)
-	defer resp.Body.Close()
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
+	} else {
+		defer resp.Body.Close()
 	}
 }
 
