@@ -55,14 +55,16 @@ vagrant provision
  1. Provision the VM using:
 
     ```sh
-    ansible-playbook  --ask-become-pass --become --inventory=inventory.ini --limit=dev playbook.yml
+    ansible-playbook --ask-become-pass --become --inventory=inventory.ini --extra-vars "ansible_user=$REMOTEUSER" playbook.yml
     ```
 
     or, to check only (will not provision if using `--check`)
 
     ```sh
-    ansible-playbook --check --diff --ask-become-pass --become --inventory=inventory.ini playbook.yml
+    ansible-playbook --check --diff --ask-become-pass --become --inventory=inventory.ini --extra-vars "ansible_user=$REMOTEUSER" playbook.yml
     ```
+
+    where `$REMOTEUSER` is the name of a user on the target machine who can become `root` via `sudo`.
 
 ## Notes on structure of this Ansible config
 
