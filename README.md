@@ -1,5 +1,4 @@
 # inga
-**inga**'s Not Google Analytics
 
 # Client Developers
 For now:
