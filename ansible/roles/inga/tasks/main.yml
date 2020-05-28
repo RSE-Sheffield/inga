@@ -1,0 +1,62 @@
+---
+- name: Ensure inga POSIX group is locally defined 
+  group:
+    name: "{{ inga_group }}"
+    system: yes
+    state: present
+
+- name: Ensure inga POSIX service account is locally defined 
+  user:
+    name: "{{ inga_user }}"
+    comment: inga
+    group: "{{ inga_group }}"
+    shell: /sbin/nologin
+    create_home: no
+    system: yes
+
+- name: Ensure dir exists for inga binary
+  file: 
+    path: "{{ inga_binary_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure inga binary exists
+  copy:
+    src: "{{ inga_binary_src_path }}"
+    dest: "{{ inga_binary_dir }}/inga"
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - restart inga
+
+- name: Ensure inga can bind to privileged ports
+  capabilities:
+    path: "{{ inga_binary_dir }}/inga"
+    capability: cap_net_bind_service=+ep
+    state: present
+  notify:
+    - restart inga
+
+- name: Ensure systemd unit for inga service is present
+  template:
+    src: inga.service.j2
+    dest: /etc/systemd/system/inga.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - reload systemd
+
+- name: Ensure inga svc is running and will start at boot
+  systemd:
+    name: inga
+    enabled: yes
+    state: started
+
+# TODO
+# - inga user needs a home dir?
+# - X509 config
+# - firewall config

@@ -14,14 +14,14 @@ After=network.target
 # - directory /mnt/data/inga for the log output;
 
 [Service]
-User=inga
-Group=inga
-Environment=INGA_PORT=443
+User={{ inga_user }}
+Group={{ inga_group }}
+Environment=INGA_PORT={{ inga_port }}
 ExecStart=/srv/inga/tls-inga -cert /srv/inga/fullchain.pem -key /srv/inga/privkey.pem
 LimitNOFILE=8800
 Restart=always
 RestartSec=1
-WorkingDirectory=/mnt/data/inga
+WorkingDirectory={{ inga_working_dir }}
 
 [Install]
 WantedBy=multi-user.target

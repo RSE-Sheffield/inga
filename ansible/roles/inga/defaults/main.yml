@@ -1,0 +1,8 @@
+---
+inga_user: inga
+inga_group: inga
+inga_port: 443
+inga_binary_dir: /srv/inga
+inga_binary_src_path: inga
+inga_systemd_svc_path: inga.service
+inga_working_dir: /tmp
